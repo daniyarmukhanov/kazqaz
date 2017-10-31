@@ -1,8 +1,5 @@
 <template>
   <b-container>
-    <h1>
-        <icon name="language" scale="5"></icon>
-    </h1>
     <h2><span v-html="form.originalTitle"></span> <icon name="long-arrow-right"></icon> <span v-html="form.translatedTitle"></span></h2>
     <hr />
     <b-form>
@@ -13,6 +10,7 @@
             <b-form-textarea id="originalText"
                            v-model="form.originalText"
                              :rows="20"
+                             :max-rows="30"
                              @input="onRandomTranslate"
                              placeholder="Мәтінді енгізіңіз..."
             ></b-form-textarea>
@@ -24,6 +22,7 @@
             <b-form-textarea id="translatedText"
                            v-model="form.translatedText"
                              :rows="20"
+                             :max-rows="30"
             ></b-form-textarea>
           </b-form-group>
         </b-col>
@@ -33,6 +32,7 @@
         <b-col>
           <a :href="form.shareLink">{{form.originalTitle}}</a>
           <br />
+          <br />
         </b-col>
       </b-row>
     </b-form>
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import 'vue-awesome/icons/language'
+import 'vue-awesome/icons/repeat'
 import 'vue-awesome/icons/long-arrow-right'
 import 'vue-awesome/icons/question-circle'
 import Icon from 'vue-awesome/components/Icon'
@@ -97,10 +97,10 @@ export default {
         let tmp = document.createElement('div')
         tmp.innerHTML = data.parse.text['*']
         let text = tmp.textContent || tmp.innerText || ''
-        this.form.originalText = text
-        this.form.translatedText = translate(this.systemMapping, text, this.form.translatedText)
+        this.form.originalText = text.replace(/\n\s*\n\s*\n/g, '\n\n').replace(/^\s+|\s+$/g, '')
+        this.form.translatedText = translate(this.systemMapping, text, this.form.translatedText).replace(/\n\s*\n\s*\n/g, '\n\n').replace(/^\s+|\s+$/g, '')
         this.form.shareLink = 'https://kk.wikipedia.org/wiki/' + this.form.originalTitle
-        this.$router.push({name: 'random', query: {id: pageId}})
+        // this.$router.push({name: 'random', query: {id: pageId}})
       })
     }
   }
