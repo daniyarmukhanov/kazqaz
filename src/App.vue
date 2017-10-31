@@ -8,6 +8,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Translator from './components/Translator.vue'
+import Random from './components/Random.vue'
 import BootstrapVue from 'bootstrap-vue'
 import VueFire from 'vuefire'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -23,6 +24,11 @@ const router = new VueRouter({
       path: '/',
       name: 'home',
       component: Translator
+    },
+    {
+      path: '/random',
+      name: 'random',
+      component: Random
     }
   ]
 })

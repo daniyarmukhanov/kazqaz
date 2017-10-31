@@ -144,6 +144,8 @@ import 'vue-awesome/icons/long-arrow-right'
 import 'vue-awesome/icons/question-circle'
 import Icon from 'vue-awesome/components/Icon'
 import {db} from './../api/firebase'
+import {mapping} from './../api/mapping'
+import {translate} from './../api/translate'
 export default {
   name: 'Translator',
   components: {
@@ -158,80 +160,7 @@ export default {
         translatedUser: '',
         shareLink: null
       },
-      systemMapping: {
-        'А': 'A',
-        'а': 'a',
-        'Ә': 'A\'',
-        'ә': 'a\'',
-        'Б': 'B',
-        'б': 'b',
-        'Д': 'D',
-        'д': 'd',
-        'Е': 'E',
-        'е': 'e',
-        'Ф': 'F',
-        'ф': 'f',
-        'Г': 'G',
-        'г': 'g',
-        'Ғ': 'G\'',
-        'ғ': 'g\'',
-        'Х': 'H',
-        'х': 'h',
-        'Һ': 'H',
-        'һ': 'h',
-        'І': 'I',
-        'і': 'i',
-        'И': 'I\'',
-        'и': 'i\'',
-        'Й': 'I\'',
-        'й': 'i\'',
-        'Ж': 'J',
-        'ж': 'j',
-        'К': 'K',
-        'к': 'k',
-        'Л': 'L',
-        'л': 'l',
-        'М': 'M',
-        'м': 'm',
-        'Н': 'N',
-        'н': 'n',
-        'Ң': 'N\'',
-        'ң': 'n\'',
-        'О': 'O',
-        'о': 'o',
-        'Ө': 'O\'',
-        'ө': 'o\'',
-        'П': 'P',
-        'п': 'p',
-        'Қ': 'Q',
-        'қ': 'q',
-        'Р': 'R',
-        'р': 'r',
-        'С': 'S',
-        'с': 's',
-        'Ш': 'S\'',
-        'ш': 's\'',
-        'Ч': 'C\'',
-        'ч': 'c\'',
-        'Т': 'T',
-        'т': 't',
-        'Ұ': 'U',
-        'ұ': 'u',
-        'Ү': 'U\'',
-        'ү': 'u\'',
-        'В': 'V',
-        'в': 'v',
-        'Ы': 'Y',
-        'ы': 'y',
-        'У': 'Y\'',
-        'у': 'y\'',
-        'З': 'Z',
-        'з': 'z',
-        'Ь': '',
-        'ь': '',
-        'Я': 'I\'a',
-        'я': 'i\'a'
-      },
+      systemMapping: mapping,
       userMapping: {}
     }
   },
@@ -263,38 +192,12 @@ export default {
       this.onSystemTranslate()
     },
     onSystemTranslate () {
-      let current = ''
-      let mapping = this.systemMapping
       this.form.translatedText = ''
-      for (let i = 0; i < this.form.originalText.length; i++) {
-        // Если символ найден в массиве то меняем его
-        if (mapping[this.form.originalText[i]] !== undefined) {
-          if (current !== mapping[this.form.originalText[i]]) {
-            this.form.translatedText += mapping[this.form.originalText[i]]
-            current = mapping[this.form.originalText[i]]
-          }
-        } else {
-          this.form.translatedText += this.form.originalText[i]
-          current = this.form.originalText[i]
-        }
-      }
+      this.form.translatedText = translate(this.systemMapping, this.form.originalText, this.form.translatedText)
     },
     onUserTranslate () {
-      let current = ''
-      let mapping = this.userMapping
       this.form.translatedUser = ''
-      for (let i = 0; i < this.form.originalUser.length; i++) {
-        // Если символ найден в массиве то меняем его
-        if (mapping[this.form.originalUser[i]] !== undefined) {
-          if (current !== mapping[this.form.originalUser[i]]) {
-            this.form.translatedUser += mapping[this.form.originalUser[i]]
-            current = mapping[this.form.originalUser[i]]
-          }
-        } else {
-          this.form.translatedUser += this.form.originalUser[i]
-          current = this.form.originalUser[i]
-        }
-      }
+      this.form.translatedUser = translate(this.userMapping, this.form.originalUser, this.form.translatedUser)
     },
     checkMapping (letter) {
       return this.systemMapping[letter] === this.userMapping[letter]
