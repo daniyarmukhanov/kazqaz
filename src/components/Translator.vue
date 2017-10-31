@@ -73,6 +73,11 @@
       <b-btn class="mt-3" variant="outline-primary" block @click="hideModal">Жабу / Jaby'</b-btn>
     </b-modal>
     <b-modal ref="modalInput" hide-footer title="Qazaq latyn a'lipbi'i" size="lg">
+      <b-alert show>
+        Алфавиттің бұл нұсқасын пайдаланушы ұсынып, бекітілгеннен өзгеше
+        <hr />
+        Alfavi'tin' bul nusqasyn pai'dalany's'y usynyp, bekitilgenen o'zges'e
+      </b-alert>
       <b-row v-if="form.shareLink">
         <b-col>
           <b-input type="text" v-model="form.shareLink"></b-input>
@@ -125,8 +130,8 @@
                              :rows="9"
             ></b-form-textarea>
           </b-form-group>
-          <b-btn class="mt-3" variant="outline-primary" block @click="hideInput">Жабу / Jaby'</b-btn>
           <b-btn class="mt-3" variant="outline-success" block @click="share">Бөлісіңіз / Bo'lisin'iz</b-btn>
+          <b-btn class="mt-3" variant="outline-primary" block @click="hideInput">Жабу / Jaby'</b-btn>
         </b-col>
       </b-row>
     </b-modal>
@@ -241,7 +246,7 @@ export default {
       db.ref('mappings').child(this.$route.query.keyboard)
         .once('value')
         .then((snapshot) => {
-          this.userMapping = snapshot.val()
+          this.userMapping = JSON.parse(snapshot.val())
           this.showInput()
         })
     } else {
@@ -308,7 +313,7 @@ export default {
       this.$refs.modalInput.hide()
     },
     share () {
-      let key = this.$firebaseRefs.mappings.push(this.userMapping).key
+      let key = this.$firebaseRefs.mappings.push(JSON.stringify(this.userMapping)).key
       let query = { keyboard: key }
       if (this.form.originalText !== this.form.originalUser) {
         query.text = this.form.originalUser
