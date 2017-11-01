@@ -42,6 +42,13 @@
           </b-button>
         </b-col>
       </b-row>
+      <b-row class="text-center">
+        <b-col>
+          <b-button variant="link" @click="showRandom">
+            Кездейсоқ мақала / Kezdei'soq maqala
+          </b-button>
+        </b-col>
+      </b-row>
     </b-form>
     <b-modal ref="modalCurrent" hide-footer title="Qazaq latyn a'lipbi'i">
       <b-row>
@@ -223,6 +230,9 @@ export default {
       }
       this.$router.push({name: 'home', query})
       this.form.shareLink = window.location.href
+    },
+    showRandom () {
+      this.$router.push({name: 'random'})
     }
   },
   firebase: {
